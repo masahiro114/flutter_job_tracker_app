@@ -1,6 +1,3 @@
-# Recommended analysis_options.yaml for Flutter development
-# Flutter開発向けの推奨 analysis_options.yaml
-
 include: package:flutter_lints/flutter.yaml
 
 linter:
@@ -23,7 +20,7 @@ linter:
 
     # Avoid unused imports
     # 未使用のimportを避ける
-    - unused_import
+    - unused_imports  # Corrected the rule name to 'unused_imports' (修正されたルール名 'unused_imports')
 
     # Enforce camelCase naming for methods and variables
     # メソッドや変数にはキャメルケースを強制する
@@ -31,7 +28,8 @@ linter:
 
     # Avoid nesting code deeply
     # 深いネストを避ける
-    - avoid_nested_conditional_expressions
+    # Commented out as it's deprecated (非推奨のためコメントアウト)
+    # - avoid_nested_conditional_expressions
 
 analyzer:
   strong-mode:
@@ -56,5 +54,4 @@ analyzer:
 # Add custom exclusions if needed
 # 必要に応じて独自の除外ルールを追加
 excludes:
-  - test/**  # Ignore test files during analysis
-  # テストファイルを解析対象外とする
+  - test/**  # Ignore test files during analysis (テストファイルを解析対象外とする)
