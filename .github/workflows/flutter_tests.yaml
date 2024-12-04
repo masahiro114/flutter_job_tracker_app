@@ -177,39 +177,39 @@ jobs:
           path: build/ios/Runner.ipa
 
 
-    # Build Android App Job
-    # Androidアプリのビルドジョブ
-    build_android:
-      name: Build Android App (.apk or .aab)
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Code
-          # コードをチェックアウト
-          uses: actions/checkout@v3
+  # Build Android App Job
+  # Androidアプリのビルドジョブ
+  build_android:
+    name: Build Android App (.apk or .aab)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        # コードをチェックアウト
+        uses: actions/checkout@v3
 
-        - name: Set up JDK 17
-          # JDK 17をセットアップ
-          uses: actions/setup-java@v3
-          with:
-            java-version: '17'
+      - name: Set up JDK 17
+        # JDK 17をセットアップ
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
 
-        - name: Set up Flutter
-          # Flutter環境をセットアップ
-          uses: subosito/flutter-action@v2
-          with:
-            flutter-version: '3.24.5'
+      - name: Set up Flutter
+        # Flutter環境をセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
 
-        - name: Install Dependencies
-          # 依存関係をインストール
-          run: flutter pub get
+      - name: Install Dependencies
+        # 依存関係をインストール
+        run: flutter pub get
 
-        - name: Build APK or AAB
-          # APKまたはAABをビルド
-          run: flutter build apk --release # Or use 'flutter build appbundle --release' for .aab
+      - name: Build APK or AAB
+        # APKまたはAABをビルド
+        run: flutter build apk --release # Or use 'flutter build appbundle --release' for .aab
 
-        - name: Upload Build Artifacts
-          # ビルドしたアーティファクトをアップロード
-          uses: actions/upload-artifact@v3
-          with:
-            name: android-app
-            path: build/app/outputs/flutter-apk/app-release.apk  # Or use the path for .aab
+      - name: Upload Build Artifacts
+        # ビルドしたアーティファクトをアップロード
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-app
+          path: build/app/outputs/flutter-apk/app-release.apk  # Or use the path for .aab
