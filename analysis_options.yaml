@@ -20,7 +20,7 @@ linter:
 
     # Avoid unused imports
     # 未使用のimportを避ける
-    - unused_imports  # Corrected the rule name to 'unused_imports' (修正されたルール名 'unused_imports')
+    # - unused_imports  # Corrected the rule name to 'unused_imports' (修正されたルール名 'unused_imports')
 
     # Enforce camelCase naming for methods and variables
     # メソッドや変数にはキャメルケースを強制する

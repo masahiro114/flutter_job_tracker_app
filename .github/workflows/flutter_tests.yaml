@@ -138,68 +138,82 @@ jobs:
 
   # Build iOS App Job
   # iOSアプリのビルドジョブ
-  build_ios:
-    name: Build iOS App (.ipa)
-    runs-on: macos-latest
-    steps:
-      - name: Checkout Code
-        # コードをチェックアウト
-        uses: actions/checkout@v3
+# Build iOS App Job
+# iOSアプリのビルドジョブ
+build_ios:
+  name: Build iOS App (.ipa)
+  runs-on: macos-latest
+  steps:
+    - name: Checkout Code
+      # コードをチェックアウト
+      uses: actions/checkout@v3
 
-      - name: Set up Flutter
-        # Flutter環境をセットアップ
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.5'
+    - name: Set up Flutter
+      # Flutter環境をセットアップ
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.5'
 
-      - name: Install Dependencies
-        # 依存関係をインストール
-        run: flutter pub get
+    - name: Install Dependencies
+      # 依存関係をインストール
+      run: flutter pub get
 
-      - name: Build iOS
-        # iOSアプリをビルド
-        run: flutter build ios --release --no-codesign
+    - name: Build iOS
+      # iOSアプリをビルド
+      run: flutter build ios --release --no-codesign
 
-      - name: Export iOS IPA
-        # iOSのIPAファイルをエクスポート
-        run: |
-          cd build/ios/iphoneos
-          xcrun -sdk iphoneos PackageApplication -v Runner.app -o ${{ github.workspace }}/Runner.ipa
+    - name: Archive iOS App
+      # iOSアプリをアーカイブ
+      run: |
+        xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release -archivePath $PWD/build/ios/Runner.xcarchive archive
 
-      - name: Upload iOS IPA as Artifact
-        # iOS IPAファイルをアーティファクトとしてアップロード
-        uses: actions/upload-artifact@v3
-        with:
-          name: ios-app
-          path: Runner.ipa
+    - name: Export iOS IPA
+      # iOSのIPAファイルをエクスポート
+      run: |
+        xcodebuild -exportArchive -archivePath $PWD/build/ios/Runner.xcarchive -exportOptionsPlist ios/ExportOptions.plist -exportPath $PWD/build/ios
+
+    - name: Upload iOS IPA as Artifact
+      # iOS IPAファイルをアーティファクトとしてアップロード
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-app
+        path: build/ios/Runner.ipa
 
   # Build Android App Job
   # Androidアプリのビルドジョブ
-  build_android:
-    name: Build Android APK
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        # コードをチェックアウト
-        uses: actions/checkout@v3
+# Build Android App Job
+# Androidアプリのビルドジョブ
+build_android:
+  name: Build Android App (.apk or .aab)
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout Code
+      # コードをチェックアウト
+      uses: actions/checkout@v3
 
-      - name: Set up Flutter
-        # Flutter環境をセットアップ
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.5'
+    - name: Set up JDK 17
+      # JDK 17をセットアップ
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
 
-      - name: Install Dependencies
-        # 依存関係をインストール
-        run: flutter pub get
+    - name: Set up Flutter
+      # Flutter環境をセットアップ
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.5'
 
-      - name: Build Android APK
-        # Android APKをビルド
-        run: flutter build apk --release
+    - name: Install Dependencies
+      # 依存関係をインストール
+      run: flutter pub get
 
-      - name: Upload Android APK as Artifact
-        # Android APKファイルをアーティファクトとしてアップロード
-        uses: actions/upload-artifact@v3
-        with:
-          name: android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+    - name: Build APK or AAB
+      # APKまたはAABをビルド
+      run: flutter build apk --release # Or use 'flutter build appbundle --release' for .aab
+
+    - name: Upload Build Artifacts
+      # ビルドしたアーティファクトをアップロード
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-app
+        path: build/app/outputs/flutter-apk/app-release.apk  # Or use the path for .aab
