@@ -128,8 +128,8 @@ jobs:
         run: flutter pub get
 
       - name: Run Widget Tests
-      # ウィジェットテストを実行
-      run: flutter test test/widget --coverage
+        # ウィジェットテストを実行
+        run: flutter test test/widget --coverage
 
       - name: Upload Widget Test Coverage Report
         # ウィジェットテストのカバレッジレポートをアップロード
