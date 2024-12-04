@@ -43,7 +43,7 @@ jobs:
         # Flutter環境をセットアップ
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.24.5'
 
       - name: Install Dependencies
         # 依存関係をインストール
@@ -75,7 +75,7 @@ jobs:
         # Flutter環境をセットアップ
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.24.5'
 
       - name: Install Dependencies
         # 依存関係をインストール
@@ -100,7 +100,7 @@ jobs:
         # Flutter環境をセットアップ
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.24.5'
 
       - name: Run Flutter Analyze
         # Flutterの静的解析を実行
@@ -121,7 +121,7 @@ jobs:
         # Flutter環境をセットアップ
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.24.5'
 
       - name: Install Dependencies
         # 依存関係をインストール
