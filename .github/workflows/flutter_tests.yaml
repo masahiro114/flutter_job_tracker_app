@@ -192,6 +192,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'adoptopenjdk'  # Or use 'zulu' or 'amazon-corretto' if you prefer
 
       - name: Set up Flutter
         # Flutter環境をセットアップ
@@ -213,3 +214,4 @@ jobs:
         with:
           name: android-app
           path: build/app/outputs/flutter-apk/app-release.apk  # Or use the path for .aab
+
