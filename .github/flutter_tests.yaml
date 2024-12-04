@@ -1,0 +1,140 @@
+# GitHub Actions Workflow for Flutter Tests
+# This workflow configures automated testing for a Flutter project.
+# このワークフローは、Flutterプロジェクトの自動テストを設定します。
+
+# Testing Types Description:
+# テストの種類の説明:
+# - Unit Tests: Focus on testing individual components or functions in isolation to ensure they work correctly.
+#   単体テスト: 個別のコンポーネントや関数を単独でテストし、正しく動作することを確認します。
+# - Integration Tests: Verify the interactions between different modules or systems to ensure they work together as expected.
+#   統合テスト: 異なるモジュールやシステム間の相互作用を検証し、期待通りに動作することを確認します。
+# - Static Analysis: Analyze the code for potential errors, adherence to best practices, and maintainability.
+#   静的解析: 潜在的なエラー、ベストプラクティスの順守、保守性をコードを解析して確認します。
+# - Widget Tests: Test Flutter widgets to ensure their UI and functionality meet expectations.
+#   ウィジェットテスト: FlutterウィジェットのUIと機能が期待に合致していることを確認します。
+# - Coverage Reporting: Generate detailed test coverage reports to measure how much of the code is tested.
+#   カバレッジレポート: コードのどの程度がテストされているかを測定するための詳細なテストカバレッジレポートを生成します。
+
+# FlutterプロジェクトのためのGitHub Actions ワークフロー
+
+name: Flutter Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Unit Tests Job
+  # 単体テストジョブ
+  unit_tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        # コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        # Flutter環境をセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install Dependencies
+        # 依存関係をインストール
+        run: flutter pub get
+
+      - name: Run Unit Tests with Coverage
+        # 単体テストをカバレッジ付きで実行
+        run: flutter test --coverage
+
+      - name: Upload Test Coverage Report
+        # テストカバレッジレポートをアップロード
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+
+  # Integration Tests Job
+  # 統合テストジョブ
+  integration_tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        # コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        # Flutter環境をセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install Dependencies
+        # 依存関係をインストール
+        run: flutter pub get
+
+      - name: Run Integration Tests
+        # 統合テストを実行
+        run: flutter drive --target=test_driver/app.dart
+
+  # Static Analysis Job
+  # 静的解析ジョブ
+  static_analysis:
+    name: Run Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        # コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        # Flutter環境をセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Run Flutter Analyze
+        # Flutterの静的解析を実行
+        run: flutter analyze
+
+  # Widget Tests Job
+  # ウィジェットテストジョブ
+  widget_tests:
+    name: Run Widget Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        # コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        # Flutter環境をセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install Dependencies
+        # 依存関係をインストール
+        run: flutter pub get
+
+      - name: Run Widget Tests
+        # ウィジェットテストを実行
+        run: flutter test test/widget_tests/
+
+      - name: Upload Widget Test Coverage Report
+        # ウィジェットテストのカバレッジレポートをアップロード
+        uses: actions/upload-artifact@v3
+        with:
+          name: widget-coverage-report
+          path: coverage/lcov.info
+

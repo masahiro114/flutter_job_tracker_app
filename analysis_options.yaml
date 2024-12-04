@@ -1,0 +1,60 @@
+# Recommended analysis_options.yaml for Flutter development
+# Flutter開発向けの推奨 analysis_options.yaml
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Prefer using const constructors where possible
+    # 可能であればconstコンストラクターを使用することを推奨します
+    - prefer_const_constructors
+
+    # Avoid prints in production code
+    # 本番コードでprint文の使用を避ける
+    - avoid_print
+
+    # Require always putting a `const` keyword where possible
+    # 必要に応じて常に`const`キーワードを使用することを求めます
+    - prefer_const_literals_to_create_immutables
+
+    # Use final for variables that are not reassigned
+    # 再代入されない変数にはfinalを使用する
+    - prefer_final_locals
+
+    # Avoid unused imports
+    # 未使用のimportを避ける
+    - unused_import
+
+    # Enforce camelCase naming for methods and variables
+    # メソッドや変数にはキャメルケースを強制する
+    - camel_case_types
+
+    # Avoid nesting code deeply
+    # 深いネストを避ける
+    - avoid_nested_conditional_expressions
+
+analyzer:
+  strong-mode:
+    implicit-casts: false  # Disable implicit casts for better type safety
+    # 暗黙的キャストを無効化して型安全性を向上させる
+    implicit-dynamic: false  # Disable implicit dynamic type inference
+    # 暗黙的なdynamic型推論を無効化する
+
+  errors:
+    # Treat missing required parameters as an error
+    # 必須パラメーターの不足をエラーとして扱う
+    missing_required_param: error
+
+    # Treat missing return types as an error
+    # 戻り値の型がない場合はエラーとして扱う
+    missing_return: error
+
+    # Use unawaited calls properly
+    # 非同期呼び出しの無応答を適切に処理する
+    unawaited_futures: error
+
+# Add custom exclusions if needed
+# 必要に応じて独自の除外ルールを追加
+excludes:
+  - test/**  # Ignore test files during analysis
+  # テストファイルを解析対象外とする
