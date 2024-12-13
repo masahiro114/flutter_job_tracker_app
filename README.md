@@ -39,6 +39,10 @@ lib/
 │   └── auth_view_model.dart  # Handles business logic for auth pages
 │   └── application_view_model.dart  # Handles business logic for application pages
 ├── views/                 # View layer (UI components/pages)
+│   ├── launch/            # Launch related views
+│   │   ├── start.dart     # Start page
+│   │   ├── tracking.dart  # Tracking page
+│   │   ├── comparison.dart # Comparison page
 │   ├── auth/              # Authentication-related views
 │   │   ├── sign_up.dart  # Sign up page
 │   │   ├── sign_in.dart  # Sign in page
