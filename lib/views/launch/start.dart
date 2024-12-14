@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const FigmaToCodeApp());
@@ -40,6 +41,7 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int click = 0;
     return Scaffold(
       body: Container(
         // Background Colour
@@ -106,6 +108,10 @@ class StartPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
+                        click += 1; // Testing button clicks
+                        Fluttertoast.showToast(
+                            msg: "Clicked: $click",
+                            gravity: ToastGravity.BOTTOM);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -128,6 +134,9 @@ class StartPage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // Handle text press
+                      click += 1; // Testing button clicks
+                      Fluttertoast.showToast(
+                          msg: "Clicked: $click", gravity: ToastGravity.BOTTOM);
                     },
                     child: Text(
                       'Sign in',
