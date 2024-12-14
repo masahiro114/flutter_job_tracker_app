@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const FigmaToCodeApp());
@@ -110,8 +111,9 @@ class StartPage extends StatelessWidget {
                         // Handle button press
                         click += 1; // Testing button clicks
                         Fluttertoast.showToast(
-                            msg: "Clicked: $click",
+                            msg: "Sign Up: $click",
                             gravity: ToastGravity.BOTTOM);
+                        context.go('/sign_up.dart');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -136,7 +138,8 @@ class StartPage extends StatelessWidget {
                       // Handle text press
                       click += 1; // Testing button clicks
                       Fluttertoast.showToast(
-                          msg: "Clicked: $click", gravity: ToastGravity.BOTTOM);
+                          msg: "Sign In: $click", gravity: ToastGravity.BOTTOM);
+                      //context.go('/lib/views/auth/sign_in.dart');
                     },
                     child: Text(
                       'Sign in',
