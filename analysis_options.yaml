@@ -54,4 +54,6 @@ analyzer:
 # Add custom exclusions if needed
 # 必要に応じて独自の除外ルールを追加
 excludes:
-  - test/**  # Ignore test files during analysis (テストファイルを解析対象外とする)
+  - test/unit/unit_test.dart # Ignore test files during analysis (テストファイルを解析対象外とする)
+
+

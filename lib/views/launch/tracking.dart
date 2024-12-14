@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class StartPage extends StatelessWidget {
-  const StartPage({super.key});
+class TrackingPage extends StatelessWidget {
+  const TrackingPage({super.key});
 
   // Extracted reusable text style for consistency
   TextStyle _textStyle({
@@ -63,7 +63,7 @@ class StartPage extends StatelessWidget {
                 children: [
                   // Title Text
                   Text(
-                    'Job Tracker',
+                    'Tracking',
                     style: _textStyle(
                       color: Colors.white,
                       fontSize: 32,
@@ -73,7 +73,7 @@ class StartPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   // Subtitle Text
                   Text(
-                    'Your path to career success, tracked and managed.',
+                    'You can track job applications and check your status.',
                     style: _textStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -89,7 +89,7 @@ class StartPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
-                        context.go('/tracking');
+                        context.go('/comparison');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -98,7 +98,7 @@ class StartPage extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Continue to sign up',
+                        'Next',
                         style: _textStyle(
                           color: Color(0xFF0309C8),
                           fontSize: 17,
