@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_job_tracker_app/main.dart';
-import 'package:flutter_job_tracker_app/views/launch/tracking.dart';
+import 'package:flutter_job_tracker_app/view/launch/tracking_view.dart';
 
 void main() {
   testWidgets('TrackingPage has title, subtitle, and button, and navigation works', (WidgetTester tester) async {
@@ -58,8 +57,8 @@ class ComparisonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Comparison')),
-      body: Center(child: Text('Comparison Page Content')),
+      appBar: AppBar(title: const Text('Comparison')),
+      body: const Center(child: Text('Comparison Page Content')),
     );
   }
 }

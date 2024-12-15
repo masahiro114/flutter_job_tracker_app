@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94467057088",
+    "project_id": "fir-flutter-job-tracker",
+    "storage_bucket": "fir-flutter-job-tracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94467057088:android:a425691a8dcaff7c3fd425",
+        "android_client_info": {
+          "package_name": "com.masahiro.jobtracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANTxU3cYEn_AJb4cV_7qXZcntADhas2ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

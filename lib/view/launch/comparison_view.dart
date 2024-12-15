@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ComparisonPage extends StatelessWidget {
   const ComparisonPage({super.key});
@@ -88,6 +89,7 @@ class ComparisonPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
+                        context.go('/signup');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -110,6 +112,7 @@ class ComparisonPage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // Handle text press
+                      
                     },
                     child: Text(
                       'Sign in',

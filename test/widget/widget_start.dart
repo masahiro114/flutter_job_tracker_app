@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_job_tracker_app/main.dart';
-import 'package:flutter_job_tracker_app/views/launch/start.dart';
-import 'package:flutter_job_tracker_app/views/launch/tracking.dart';
+import 'package:flutter_job_tracker_app/view/launch/start_view.dart';
 
 void main() {
   testWidgets('StartPage has title, subtitle, and button, and navigation works', (WidgetTester tester) async {
@@ -59,8 +57,8 @@ class TrackingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tracking')),
-      body: Center(child: Text('Tracking Page Content')),
+      appBar: AppBar(title: const Text('Tracking')),
+      body: const Center(child: Text('Tracking Page Content')),
     );
   }
 }
