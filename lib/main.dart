@@ -6,6 +6,7 @@ import 'view/launch/tracking_view.dart';
 import 'view/launch/comparison_view.dart';
 import 'view/auth/signup_view.dart';
 import 'view/auth/signin_view.dart';
+import 'view/core/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -126,6 +127,27 @@ final GoRouter _router = GoRouter(
         return CustomTransitionPage<void>(
           key: state.pageKey,
           child: const SignInPage(),
+          transitionDuration: const Duration(milliseconds: 200),
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+      },
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomePage(),
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        // Custom transition for StartPage using FadeTransition
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const HomePage(),
           transitionDuration: const Duration(milliseconds: 200),
           transitionsBuilder: (BuildContext context,
               Animation<double> animation,
