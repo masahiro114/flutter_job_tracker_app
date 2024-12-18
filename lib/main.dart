@@ -5,8 +5,9 @@ import 'view/launch/start_view.dart';
 import 'view/launch/tracking_view.dart';
 import 'view/launch/comparison_view.dart';
 import 'view/auth/signup_view.dart';
+import 'view/auth/signin_view.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -96,7 +97,7 @@ final GoRouter _router = GoRouter(
         );
       },
     ),
-        GoRoute(
+    GoRoute(
       path: '/signup',
       builder: (context, state) => const SignUpPage(),
       pageBuilder: (BuildContext context, GoRouterState state) {
@@ -117,6 +118,26 @@ final GoRouter _router = GoRouter(
         );
       },
     ),
-
+    GoRoute(
+      path: '/signin',
+      builder: (context, state) => const SignInPage(),
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        // Custom transition for StartPage using FadeTransition
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const SignInPage(),
+          transitionDuration: const Duration(milliseconds: 200),
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+      },
+    ),
   ],
 );

@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  SignUpPageState createState() => SignUpPageState();
+  SignInPageState createState() => SignInPageState();
 }
 
-class SignUpPageState extends State<SignUpPage> {
-  final TextEditingController _nameController = TextEditingController();
+class SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLoading = false;
 
   // Function to handle user sign-up
-  Future<void> _signUp() async {
+  Future<void> _signIn() async {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
@@ -31,15 +30,12 @@ class SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      final UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final UserCredential userCredential = await _auth
+          .signInWithEmailAndPassword(email: email, password: password);
 
       // Only navigate if the widget is still mounted
       if (userCredential.user != null && mounted) {
-        // If sign-up is successful, navigate to a different page
+        // If successful, navigate to a different page
         context.go('/home'); // Adjust the route name accordingly
       }
     } catch (e) {
@@ -53,7 +49,7 @@ class SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  // Error dialog
+// Error dialog
   void _showError(String message) {
     showDialog(
       context: context,
@@ -74,7 +70,7 @@ class SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // Reusable text style function
+// Reusable text style function
   TextStyle _textStyle({
     Color color = Colors.white,
     double fontSize = 17,
@@ -128,7 +124,7 @@ class SignUpPageState extends State<SignUpPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Create Account',
+                      'Sign In',
                       style: _textStyle(
                         color: Colors.white,
                         fontSize: 32,
@@ -136,42 +132,6 @@ class SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    TextField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
-                        hintStyle:
-                            TextStyle(color: Colors.white70), // Hint text color
-
-                        // Default (enabled) border color
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when enabled
-                        ),
-
-                        // Focused border color
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when focused
-                        ),
-
-                        // Border color when disabled
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white38,
-                              width:
-                                  2.0), // Slightly transparent white for disabled state
-                        ),
-                      ),
-                      style: _textStyle(
-                        color: Colors.white, // Text color for input
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -248,7 +208,7 @@ class SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : _signUp,
+                        onPressed: _isLoading ? null : _signIn,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -258,7 +218,7 @@ class SignUpPageState extends State<SignUpPage> {
                         child: _isLoading
                             ? CircularProgressIndicator()
                             : Text(
-                                'Sign up',
+                                'Sign in',
                                 style: _textStyle(
                                   color: Color(0xFF0309C8),
                                   fontSize: 17,
@@ -271,12 +231,12 @@ class SignUpPageState extends State<SignUpPage> {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          context.go('/signin');
+                          context.go('/signup');
                         },
                         child: Padding(
                           padding: EdgeInsets.all(9.0),
                           child: Text(
-                            'Sign in',
+                            'Sign up',
                             style: _textStyle(
                               color: Colors.white,
                               fontSize: 17,

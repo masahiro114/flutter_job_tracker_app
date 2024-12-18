@@ -107,21 +107,23 @@ class StartPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  // Sign In Link
+                  const SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () {
-                      // Handle text press
-                    },
-                    child: Text(
-                      'Sign in',
-                      style: _textStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        context.go('/signin');
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(9.0),
+                        child: Text(
+                          'Sign in',
+                          style: _textStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      )),
                 ],
               ),
             )),
