@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_job_tracker_app/viewmodel/tracking_viewmodel.dart';
+import 'package:flutter_job_tracker_app/model/tracking_model.dart';
+import 'package:flutter_job_tracker_app/view/common/background_widget.dart';
 
 class TrackingPage extends StatelessWidget {
   const TrackingPage({super.key});
@@ -23,111 +25,91 @@ class TrackingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create the ViewModel with the default data
+    final viewModel = TrackingPageViewModel(
+      model: TrackingPageModel.defaultData(),
+    );
+
     return Scaffold(
-      body: Container(
-        // Background Colour
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF57C7DB), Color(0xFF0309C8)],
-          ),
-        ),
-        child: Stack(
-          children: [
-            // Background Image
-            Positioned.fill(
-              top: -200,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                        'assets/images/background_icon.png'), // Correct asset path
-                    fit: BoxFit.contain,
+      body: GlobalBackground(
+        // Content Layer (Text and Button)
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 16.0,
+              left: 24.0,
+              right: 24.0,
+              bottom: 24.0,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Title Text
+                Text(
+                  viewModel.model.title,
+                  style: _textStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              ),
+                const SizedBox(height: 20),
+                // Subtitle Text
+                Text(
+                  viewModel.model.subtitle,
+                  style: _textStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    height: 1.5,
+                    fontWeight: FontWeight.w900,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                // Next Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      viewModel.onNextButtonPressed(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                    ),
+                    child: Text(
+                      viewModel.model.buttonText,
+                      style: _textStyle(
+                        color: Color(0xFF0309C8),
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    viewModel.onSignInButtonPressed(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(9.0),
+                    child: Text(
+                      'Sign in',
+                      style: _textStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            // Content Layer (Text and Button)
-            Center(
-                child: Container(
-              padding: const EdgeInsets.only(
-                top: 16.0,
-                left: 24.0,
-                right: 24.0,
-                bottom: 24.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Title Text
-                  Text(
-                    'Tracking',
-                    style: _textStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Subtitle Text
-                  Text(
-                    'You can track job applications and check your status.',
-                    style: _textStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      height: 1.5,
-                      fontWeight: FontWeight.w900,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  // Start Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle button press
-                        context.go('/comparison');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                      ),
-                      child: Text(
-                        'Next',
-                        style: _textStyle(
-                          color: Color(0xFF0309C8),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        context.go('/signin');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(9.0),
-                        child: Text(
-                          'Sign in',
-                          style: _textStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      )),
-                ],
-              ),
-            )),
-          ],
+          ),
         ),
       ),
     );
