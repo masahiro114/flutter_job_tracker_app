@@ -1,6 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
 import 'view/launch/start_view.dart';
 import 'view/launch/tracking_view.dart';
 import 'view/launch/comparison_view.dart';
@@ -11,7 +15,17 @@ import 'view/core/home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SignInViewModel()),
+        ChangeNotifierProvider(create: (_) => SignUpViewModel()),
+        // Add other providers here as needed
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -32,134 +46,57 @@ class MyApp extends StatelessWidget {
 
 final GoRouter _router = GoRouter(
   routes: [
-    // Define the route for StartPage
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return const StartPage();
-      },
       pageBuilder: (BuildContext context, GoRouterState state) {
-        // Custom transition for StartPage using FadeTransition
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const StartPage(),
-          transitionDuration: const Duration(milliseconds: 200),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        );
+        return _customFadeTransition(const StartPage(), state);
       },
     ),
     GoRoute(
       path: '/tracking',
-      builder: (context, state) => const TrackingPage(),
       pageBuilder: (BuildContext context, GoRouterState state) {
-        // Custom transition for StartPage using FadeTransition
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const TrackingPage(),
-          transitionDuration: const Duration(milliseconds: 200),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        );
+        return _customFadeTransition(const TrackingPage(), state);
       },
     ),
     GoRoute(
       path: '/comparison',
-      builder: (context, state) => const ComparisonPage(),
       pageBuilder: (BuildContext context, GoRouterState state) {
-        // Custom transition for StartPage using FadeTransition
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const ComparisonPage(),
-          transitionDuration: const Duration(milliseconds: 200),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        );
+        return _customFadeTransition(const ComparisonPage(), state);
       },
     ),
     GoRoute(
       path: '/signup',
-      builder: (context, state) => const SignUpPage(),
       pageBuilder: (BuildContext context, GoRouterState state) {
-        // Custom transition for StartPage using FadeTransition
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const SignUpPage(),
-          transitionDuration: const Duration(milliseconds: 200),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        );
+        return _customFadeTransition(const SignUpPage(), state);
       },
     ),
     GoRoute(
       path: '/signin',
-      builder: (context, state) => const SignInPage(),
       pageBuilder: (BuildContext context, GoRouterState state) {
-        // Custom transition for StartPage using FadeTransition
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const SignInPage(),
-          transitionDuration: const Duration(milliseconds: 200),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        );
+        return _customFadeTransition(const SignInPage(), state);
       },
     ),
     GoRoute(
       path: '/home',
-      builder: (context, state) => const HomePage(),
       pageBuilder: (BuildContext context, GoRouterState state) {
-        // Custom transition for StartPage using FadeTransition
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const HomePage(),
-          transitionDuration: const Duration(milliseconds: 200),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        );
+        return _customFadeTransition(const HomePage(), state);
       },
     ),
   ],
 );
+
+CustomTransitionPage<void> _customFadeTransition(
+    Widget child, GoRouterState state) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 200),
+    transitionsBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  );
+}

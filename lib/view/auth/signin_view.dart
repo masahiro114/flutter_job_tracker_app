@@ -1,56 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class SignInPage extends StatefulWidget {
+class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
-  @override
-  SignInPageState createState() => SignInPageState();
-}
-
-class SignInPageState extends State<SignInPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool _isLoading = false;
-
-  // Function to handle user sign-up
-  Future<void> _signIn() async {
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      _showError('Please enter both email and password');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final UserCredential userCredential = await _auth
-          .signInWithEmailAndPassword(email: email, password: password);
-
-      // Only navigate if the widget is still mounted
-      if (userCredential.user != null && mounted) {
-        // If successful, navigate to a different page
-        context.go('/home'); // Adjust the route name accordingly
-      }
-    } catch (e) {
-      _showError(e.toString());
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-// Error dialog
-  void _showError(String message) {
+  // Error dialog
+  void _showError(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (context) {
@@ -70,7 +27,7 @@ class SignInPageState extends State<SignInPage> {
     );
   }
 
-// Reusable text style function
+  // Reusable text style function
   TextStyle _textStyle({
     Color color = Colors.white,
     double fontSize = 17,
@@ -89,10 +46,12 @@ class SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final signInViewModel = context.watch<SignInViewModel>();
+
     return Scaffold(
       body: Container(
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -101,7 +60,7 @@ class SignInPageState extends State<SignInPage> {
         ),
         child: Stack(
           children: [
-            Positioned.fill(
+            const Positioned.fill(
               top: -200,
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -133,73 +92,51 @@ class SignInPageState extends State<SignInPage> {
                     ),
                     const SizedBox(height: 40),
                     TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
+                      controller: signInViewModel.emailController,
+                      decoration: const InputDecoration(
                         hintText: 'Enter your email',
-                        hintStyle:
-                            TextStyle(color: Colors.white70), // Hint text color
-
-                        // Default (enabled) border color
+                        hintStyle: TextStyle(color: Colors.white70),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when enabled
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
-
-                        // Focused border color
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when focused
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
-
-                        // Border color when disabled
                         disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white38,
-                              width:
-                                  2.0), // Slightly transparent white for disabled state
+                          borderSide:
+                              BorderSide(color: Colors.white38, width: 2.0),
                         ),
                       ),
                       style: _textStyle(
-                        color: Colors.white, // Text color for input
+                        color: Colors.white,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 10),
                     TextField(
-                      controller: _passwordController,
+                      controller: signInViewModel.passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Enter your password',
-                        hintStyle:
-                            TextStyle(color: Colors.white70), // Hint text color
-
-                        // Default (enabled) border color
+                        hintStyle: TextStyle(color: Colors.white70),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when enabled
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
-
-                        // Focused border color
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when focused
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
-
-                        // Border color when disabled
                         disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white38,
-                              width:
-                                  2.0), // Slightly transparent white for disabled state
+                          borderSide:
+                              BorderSide(color: Colors.white38, width: 2.0),
                         ),
                       ),
                       style: _textStyle(
-                        color: Colors.white, // Text color for input
+                        color: Colors.white,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
@@ -208,14 +145,24 @@ class SignInPageState extends State<SignInPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : _signIn,
+                        onPressed: signInViewModel.isLoading
+                            ? null
+                            : () async {
+                                final error =
+                                    await signInViewModel.signIn(context);
+                                if (error != null) {
+                                  _showError(context, error);
+                                } else {
+                                  context.go('/home');
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),
                         ),
-                        child: _isLoading
+                        child: signInViewModel.isLoading
                             ? CircularProgressIndicator()
                             : Text(
                                 'Sign in',
@@ -229,21 +176,22 @@ class SignInPageState extends State<SignInPage> {
                     ),
                     const SizedBox(height: 20),
                     GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          context.go('/signup');
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Text(
-                            'Sign up',
-                            style: _textStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w400,
-                            ),
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        context.go('/signup');
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(9.0),
+                        child: Text(
+                          'Sign up',
+                          style: _textStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -1,102 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
 
   @override
-  SignUpPageState createState() => SignUpPageState();
-}
-
-class SignUpPageState extends State<SignUpPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool _isLoading = false;
-
-  // Function to handle user sign-up
-  Future<void> _signUp() async {
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      _showError('Please enter both email and password');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      // Only navigate if the widget is still mounted
-      if (userCredential.user != null && mounted) {
-        // If sign-up is successful, navigate to a different page
-        context.go('/home'); // Adjust the route name accordingly
-      }
-    } catch (e) {
-      _showError(e.toString());
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  // Error dialog
-  void _showError(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Reusable text style function
-  TextStyle _textStyle({
-    Color color = Colors.white,
-    double fontSize = 17,
-    FontWeight fontWeight = FontWeight.w400,
-    double height = 0.08,
-    double letterSpacing = -0.43,
-  }) {
-    return TextStyle(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      height: height,
-      letterSpacing: letterSpacing,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<SignUpViewModel>();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       body: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -108,7 +27,7 @@ class SignUpPageState extends State<SignUpPage> {
             Positioned.fill(
               top: -200,
               child: DecoratedBox(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/background_icon.png'),
                     fit: BoxFit.contain,
@@ -118,12 +37,7 @@ class SignUpPageState extends State<SignUpPage> {
             ),
             Center(
               child: Container(
-                padding: const EdgeInsets.only(
-                  top: 16.0,
-                  left: 24.0,
-                  right: 24.0,
-                  bottom: 24.0,
-                ),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -132,164 +46,110 @@ class SignUpPageState extends State<SignUpPage> {
                       style: _textStyle(
                         color: Colors.white,
                         fontSize: 32,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 40),
                     TextField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
-                        hintStyle:
-                            TextStyle(color: Colors.white70), // Hint text color
-
-                        // Default (enabled) border color
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when enabled
-                        ),
-
-                        // Focused border color
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when focused
-                        ),
-
-                        // Border color when disabled
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white38,
-                              width:
-                                  2.0), // Slightly transparent white for disabled state
-                        ),
-                      ),
-                      style: _textStyle(
-                        color: Colors.white, // Text color for input
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      controller: nameController,
+                      decoration: _inputDecoration('Enter your name'),
+                      style: _textStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        hintStyle:
-                            TextStyle(color: Colors.white70), // Hint text color
-
-                        // Default (enabled) border color
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when enabled
-                        ),
-
-                        // Focused border color
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when focused
-                        ),
-
-                        // Border color when disabled
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white38,
-                              width:
-                                  2.0), // Slightly transparent white for disabled state
-                        ),
-                      ),
-                      style: _textStyle(
-                        color: Colors.white, // Text color for input
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      controller: emailController,
+                      decoration: _inputDecoration('Enter your email'),
+                      style: _textStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextField(
-                      controller: _passwordController,
+                      controller: passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your password',
-                        hintStyle:
-                            TextStyle(color: Colors.white70), // Hint text color
-
-                        // Default (enabled) border color
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when enabled
-                        ),
-
-                        // Focused border color
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // White border when focused
-                        ),
-
-                        // Border color when disabled
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white38,
-                              width:
-                                  2.0), // Slightly transparent white for disabled state
-                        ),
-                      ),
-                      style: _textStyle(
-                        color: Colors.white, // Text color for input
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      decoration: _inputDecoration('Enter your password'),
+                      style: _textStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
+                    if (viewModel.errorMessage != null)
+                      Text(
+                        viewModel.errorMessage!,
+                        style: _textStyle(color: Colors.red),
+                      ),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : _signUp,
+                        onPressed: viewModel.isLoading
+                            ? null
+                            : () async {
+                                await viewModel.signUp(
+                                  nameController.text.trim(),
+                                  emailController.text.trim(),
+                                  passwordController.text.trim(),
+                                );
+
+                                if (viewModel.errorMessage == null) {
+                                  context.go('/home');
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),
                         ),
-                        child: _isLoading
-                            ? CircularProgressIndicator()
+                        child: viewModel.isLoading
+                            ? const CircularProgressIndicator()
                             : Text(
                                 'Sign up',
                                 style: _textStyle(
-                                  color: Color(0xFF0309C8),
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF0309C8),
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          context.go('/signin');
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Text(
-                            'Sign in',
-                            style: _textStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        )),
+                      onTap: () => context.go('/signin'),
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: Text(
+                          'Sign in',
+                          style: _textStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  TextStyle _textStyle({
+    Color color = Colors.white,
+    double fontSize = 17,
+    FontWeight fontWeight = FontWeight.w400,
+  }) {
+    return TextStyle(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+    );
+  }
+
+  InputDecoration _inputDecoration(String hintText) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: const TextStyle(color: Colors.white70),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white, width: 2.0),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white, width: 2.0),
       ),
     );
   }
