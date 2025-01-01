@@ -15,13 +15,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Bottom navigation list index and elements (to be changed)
-  int _currentState = 0;
   List<Widget> body = const [
     Icon(Icons.home),
     Icon(Icons.article),
     Icon(Icons.graphic_eq),
     Icon(Icons.person),
   ];
+
+  // NavBar selected item state
+  int _currentState = 0;
+
+  // NavBar selected item state modifier
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentState = index;
+    });
+  }
 
   // Extracted reusable text style for consistency
   TextStyle _textStyle({
@@ -43,13 +52,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*bottomNavigationBar: BottomNavigationBar(items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.article), label: 'Applications'),
-        BottomNavigationBarItem(icon: Icon(Icons.graphic_eq), label: 'Report'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      ]),*/
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFF0309C8),
+        elevation: 1,
+        selectedIconTheme:
+            IconThemeData(color: Color.fromARGB(255, 39, 76, 119)),
+        selectedItemColor: Color.fromARGB(255, 39, 76, 119),
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        unselectedIconTheme:
+            IconThemeData(color: Color.fromARGB(255, 120, 163, 212)),
+        unselectedItemColor: Color.fromARGB(255, 120, 163, 212),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.article), label: 'Applications'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.graphic_eq), label: 'Report'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        currentIndex: _currentState,
+        onTap: _onItemTapped,
+      ),
       body: Container(
         // Background Colour
         clipBehavior: Clip.antiAlias,
