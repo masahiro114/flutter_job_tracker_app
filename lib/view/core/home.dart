@@ -30,6 +30,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentState = index;
     });
+    onNavBarPressed(context);
+  }
+
+  void onNavBarPressed(BuildContext context) {
+    if (_currentState == 1) {
+      context.go('/applications');
+    }
+    if (_currentState == 2) {
+      context.go('/report');
+    }
+    if (_currentState == 3) {
+      context.go('/profile');
+    }
   }
 
   // Extracted reusable text style for consistency
@@ -53,26 +66,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF0309C8),
-        elevation: 1,
-        selectedIconTheme:
-            IconThemeData(color: Color.fromARGB(255, 39, 76, 119)),
-        selectedItemColor: Color.fromARGB(255, 39, 76, 119),
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        unselectedIconTheme:
-            IconThemeData(color: Color.fromARGB(255, 120, 163, 212)),
-        unselectedItemColor: Color.fromARGB(255, 120, 163, 212),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.article), label: 'Applications'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.graphic_eq), label: 'Report'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        currentIndex: _currentState,
-        onTap: _onItemTapped,
-      ),
+          backgroundColor: const Color(0xFF0309C8),
+          elevation: 1,
+          selectedIconTheme:
+              IconThemeData(color: Color.fromARGB(255, 39, 76, 119)),
+          selectedItemColor: Color.fromARGB(255, 39, 76, 119),
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          unselectedIconTheme:
+              IconThemeData(color: Color.fromARGB(255, 120, 163, 212)),
+          unselectedItemColor: Color.fromARGB(255, 120, 163, 212),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.article), label: 'Applications'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.graphic_eq), label: 'Report'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          ],
+          currentIndex: _currentState,
+          onTap: _onItemTapped),
       body: Container(
         // Background Colour
         clipBehavior: Clip.antiAlias,
@@ -125,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
-                        //context.go('/application/1/');
+                        //context.go('/applications/1/');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -149,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
-                        //context.go('/application/1/');
+                        //context.go('/applications/2/');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -173,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
-                        //context.go('/application/1/');
+                        //context.go('/applications/3/');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

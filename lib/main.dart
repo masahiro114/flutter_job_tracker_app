@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_job_tracker_app/view/core/applications.dart';
+import 'package:flutter_job_tracker_app/view/core/proflie.dart';
+import 'package:flutter_job_tracker_app/view/core/report.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
 import 'package:go_router/go_router.dart';
@@ -80,6 +83,24 @@ final GoRouter _router = GoRouter(
       path: '/home',
       pageBuilder: (BuildContext context, GoRouterState state) {
         return _customFadeTransition(const HomePage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/profile',
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return _customFadeTransition(const ProfilePage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/report',
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return _customFadeTransition(const ReportPage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/applications',
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return _customFadeTransition(const ApplicationsPage(), state);
       },
     ),
   ],
