@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_job_tracker_app/viewmodel/home_viewmodel.dart'; // Import ViewModel
+import 'package:provider/provider.dart'; // For ChangeNotifierProvider
+import 'package:flutter_job_tracker_app/viewmodel/application_viewmodel.dart'; // Import ViewModel
 import 'package:flutter_job_tracker_app/view/common/navigation_widget.dart'; // Reusable BottomNavigationBar
 import 'package:flutter_job_tracker_app/view/common/background_widget.dart'; // Global Background
+import 'package:go_router/go_router.dart'; // Assuming you're using GoRouter for navigation
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ApplicationsPage extends StatelessWidget {
+  const ApplicationsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => HomeViewModel(),
+      create: (context) => ApplicationViewModel(), // Provide the ViewModel
       child: Scaffold(
         // Bottom Navigation Bar
-        bottomNavigationBar: Consumer<HomeViewModel>(
+        bottomNavigationBar: Consumer<ApplicationViewModel>(
           builder: (context, viewModel, child) {
             return GlobalNavigationBar(
               currentIndex: viewModel.currentState,
@@ -32,8 +33,9 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Title Text
                   Text(
-                    'Recent Applications',
+                    'Applications',
                     style: _textStyle(
                       color: Colors.white,
                       fontSize: 32,
@@ -41,11 +43,16 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 100),
-                  _applicationButton('Application 1'),
+                  // List of application buttons
+                  _applicationButton(context, 'Application 1', '/applications/1'),
                   const SizedBox(height: 20),
-                  _applicationButton('Application 2'),
+                  _applicationButton(context, 'Application 2', '/applications/2'),
                   const SizedBox(height: 20),
-                  _applicationButton('Application 3'),
+                  _applicationButton(context, 'Application 3', '/applications/3'),
+                  const SizedBox(height: 20),
+                  _applicationButton(context, 'Application 4', '/applications/4'),
+                  const SizedBox(height: 20),
+                  _applicationButton(context, 'Application 5', '/applications/5'),
                 ],
               ),
             ),
@@ -56,12 +63,13 @@ class HomePage extends StatelessWidget {
   }
 
   // Reusable Application Button
-  Widget _applicationButton(String label) {
+  Widget _applicationButton(BuildContext context, String label, String route) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Handle button press logic (e.g., navigation to specific app)
+          // Navigate to the specific application page using context
+          context.go(route);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
@@ -81,7 +89,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Extracted reusable text style for consistency
+  // Reusable text style for consistency
   TextStyle _textStyle({
     Color color = Colors.white,
     double fontSize = 17,
