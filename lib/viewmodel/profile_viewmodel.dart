@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_job_tracker_app/model/signout_model.dart';
 
 class ProfileViewModel extends ChangeNotifier {
+  // Create an instance of SignOutModel
+  final SignOutModel _signOutModel = SignOutModel();  // Instantiate SignOutModel
+
   // Bottom navigation selected index
   int _currentState = 3;
 
@@ -22,6 +26,22 @@ class ProfileViewModel extends ChangeNotifier {
       context.go('/report');
     } else if (_currentState == 3) {
       context.go('/profile');
+    }
+  }
+
+  // Sign-out method
+  Future<void> signOut(BuildContext context) async {
+    try {
+      // Call the sign-out method from SignOutModel
+      await _signOutModel.signOut();
+
+      // Navigate to the sign-in page after sign-out
+      context.go('/');  // Adjust based on your app's route name
+    } catch (e) {
+      // Show an error message if sign-out fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign-out failed: $e')),
+      );
     }
   }
 }

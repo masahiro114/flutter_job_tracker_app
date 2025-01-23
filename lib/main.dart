@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_job_tracker_app/view/core/application/applications_list.dart';
-import 'package:flutter_job_tracker_app/view/core/proflie.dart';
-import 'package:flutter_job_tracker_app/view/core/report.dart';
+import 'package:flutter_job_tracker_app/view/core/application/applications_list_view.dart';
+import 'package:flutter_job_tracker_app/view/core/proflie_view.dart';
+import 'package:flutter_job_tracker_app/view/core/report_view.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
+import 'package:flutter_job_tracker_app/viewmodel/profile_viewmodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,7 @@ import 'view/launch/tracking_view.dart';
 import 'view/launch/comparison_view.dart';
 import 'view/auth/signup_view.dart';
 import 'view/auth/signin_view.dart';
-import 'view/core/home.dart';
+import 'view/core/home_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SignInViewModel()),
         ChangeNotifierProvider(create: (_) => SignUpViewModel()),
+        ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         // Add other providers here as needed
       ],
       child: const MyApp(),

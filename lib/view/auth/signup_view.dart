@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -24,7 +24,7 @@ class SignUpPage extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned.fill(
+            const Positioned.fill(
               top: -200,
               child: DecoratedBox(
                 decoration: const BoxDecoration(
@@ -81,16 +81,16 @@ class SignUpPage extends StatelessWidget {
                         onPressed: viewModel.isLoading
                             ? null
                             : () async {
-                                await viewModel.signUp(
-                                  nameController.text.trim(),
-                                  emailController.text.trim(),
-                                  passwordController.text.trim(),
-                                );
+                          await viewModel.signUp(
+                            nameController.text.trim(),
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                          );
 
-                                if (viewModel.errorMessage == null) {
-                                  context.go('/home');
-                                }
-                              },
+                          if (viewModel.errorMessage == null) {
+                            context.go('/home');
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -100,25 +100,40 @@ class SignUpPage extends StatelessWidget {
                         child: viewModel.isLoading
                             ? const CircularProgressIndicator()
                             : Text(
-                                'Sign up',
-                                style: _textStyle(
-                                  color: const Color(0xFF0309C8),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () => context.go('/signin'),
-                      child: Padding(
-                        padding: const EdgeInsets.all(9.0),
-                        child: Text(
-                          'Sign in',
-                          style: _textStyle(color: Colors.white),
+                          'Sign up',
+                          style: _textStyle(
+                            color: const Color(0xFF0309C8),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
+
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,  // Makes the button take the full width
+                      child: ElevatedButton(
+                        onPressed: () => context.go('/'),  // Action when the button is pressed
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),  // Rounded corners
+                            side: const BorderSide(  // Apply white border
+                              color: Colors.white,  // White border color
+                              width: 2.0,  // Border width
+                            ),
+                          ),
+                          backgroundColor: Colors.transparent,  // Remove the background color
+                        ),
+                        child: const Text(
+                          'Go back',  // The text displayed on the button
+                          style: TextStyle(
+                            fontSize: 16,  // Text size
+                            fontWeight: FontWeight.bold,  // Text weight (optional)
+                            color: Colors.white,  // Text color (should be white to stand out against transparent background)
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

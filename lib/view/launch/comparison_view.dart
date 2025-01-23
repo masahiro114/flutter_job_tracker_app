@@ -82,7 +82,7 @@ class ComparisonPage extends StatelessWidget {
                     child: Text(
                       viewModel.model.buttonText,
                       style: _textStyle(
-                        color: Color(0xFF0309C8),
+                        color: const Color(0xFF0309C8),
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
@@ -96,7 +96,7 @@ class ComparisonPage extends StatelessWidget {
                     viewModel.onSignInButtonPressed(context);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(9.0),
+                    padding: const EdgeInsets.all(9.0),
                     child: Text(
                       'Sign in',
                       style: _textStyle(

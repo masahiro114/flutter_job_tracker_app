@@ -10,6 +10,7 @@ class SignUpViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  // Sign up using email and password
   Future<void> signUp(String name, String email, String password) async {
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
       _setError('Please enter all fields');
@@ -31,6 +32,8 @@ class SignUpViewModel extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
+
 
   void _setLoading(bool loading) {
     _isLoading = loading;

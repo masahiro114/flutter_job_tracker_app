@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_job_tracker_app/viewmodel/start_viewmodel.dart';
 import 'package:flutter_job_tracker_app/model/start_model.dart';
 import 'package:flutter_job_tracker_app/view/common/background_widget.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -65,8 +66,8 @@ class StartPage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
                 // Start Button
+                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -80,31 +81,46 @@ class StartPage extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      viewModel.model.buttonText,
+                      'Sign up with Email',
                       style: _textStyle(
-                        color: Color(0xFF0309C8),
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    viewModel.onSignIn(context);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(9.0),
-                    child: Text(
-                      'Sign in',
-                      style: _textStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400,
+                Container(
+                  width: double.infinity,  // Width of the container
+                  height: 5,  // Height of the container (typically you'd want a higher value for visibility)
+                  decoration: BoxDecoration(
+                    border: const Border(
+                      top: const BorderSide(
+                        color: Colors.white,  // White border color
+                        width: 1.0,  // Border width
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: SignInButton(
+                    Buttons.Email,
+                    onPressed: () {
+                      viewModel.onSignIn(context);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Google Sign-In Button using flutter_signin_button
+                SizedBox(
+                  width: double.infinity,
+                  child: SignInButton(
+                    Buttons.Google,
+                    onPressed: () async {
+                      await viewModel.onGoogleSignIn(context);
+                    },
                   ),
                 ),
               ],

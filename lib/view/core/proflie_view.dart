@@ -12,7 +12,6 @@ class ProfilePage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ProfileViewModel(),
       child: Scaffold(
-        // Bottom Navigation Bar
         bottomNavigationBar: Consumer<ProfileViewModel>(
           builder: (context, viewModel, child) {
             return GlobalNavigationBar(
@@ -24,7 +23,6 @@ class ProfilePage extends StatelessWidget {
             );
           },
         ),
-        // Background and Content
         body: GlobalBackground(
           child: Center(
             child: Padding(
@@ -40,6 +38,25 @@ class ProfilePage extends StatelessWidget {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
+                  const SizedBox(height: 100),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Trigger the sign-out process when the button is pressed
+                      Provider.of<ProfileViewModel>(context, listen: false).signOut(context);
+                    },
+                    child: Text(
+                      'Sign Out',
+                      style: _textStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -49,7 +66,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Reusable text style for consistency
   TextStyle _textStyle({
     Color color = Colors.white,
     double fontSize = 17,

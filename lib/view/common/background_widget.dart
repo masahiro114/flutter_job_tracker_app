@@ -9,7 +9,7 @@ class GlobalBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -19,7 +19,7 @@ class GlobalBackground extends StatelessWidget {
       child: Stack(
         children: [
           // Background Image
-          Positioned.fill(
+          const Positioned.fill(
             top: -200,
             child: DecoratedBox(
               decoration: BoxDecoration(

@@ -80,7 +80,7 @@ class ApplicationsPage extends StatelessWidget {
         child: Text(
           label,
           style: _textStyle(
-            color: Color(0xFF0309C8),
+            color: const Color(0xFF0309C8),
             fontSize: 17,
             fontWeight: FontWeight.w700,
           ),

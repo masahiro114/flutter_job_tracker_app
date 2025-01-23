@@ -12,14 +12,14 @@ class SignInPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -163,35 +163,45 @@ class SignInPage extends StatelessWidget {
                           ),
                         ),
                         child: signInViewModel.isLoading
-                            ? CircularProgressIndicator()
+                            ? const CircularProgressIndicator()
                             : Text(
                                 'Sign in',
                                 style: _textStyle(
-                                  color: Color(0xFF0309C8),
-                                  fontSize: 17,
+                                  color: const Color(0xFF0309C8),
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        context.go('/signup');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(9.0),
-                        child: Text(
-                          'Sign up',
-                          style: _textStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
+                    const SizedBox(height: 20),  // This adds a space of 40 height
+
+                    SizedBox(
+                      width: double.infinity,  // Makes the button take the full width
+                      child: ElevatedButton(
+                        onPressed: () => context.go('/'),  // Action when the button is pressed
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),  // Rounded corners
+                            side: const BorderSide(  // Apply white border
+                              color: Colors.white,  // White border color
+                              width: 2.0,  // Border width
+                            ),
+                          ),
+                          backgroundColor: Colors.transparent,  // Remove the background color
+                        ),
+                        child: const Text(
+                          'Go back',  // The text displayed on the button
+                          style: TextStyle(
+                            fontSize: 16,  // Text size
+                            fontWeight: FontWeight.bold,  // Text weight (optional)
+                            color: Colors.white,  // Text color (should be white to stand out against transparent background)
                           ),
                         ),
                       ),
-                    ),
+                    )
+
+
                   ],
                 ),
               ),
