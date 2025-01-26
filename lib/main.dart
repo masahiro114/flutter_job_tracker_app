@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_job_tracker_app/view/auth/otp_screen.dart';
 import 'package:flutter_job_tracker_app/view/core/application/applications_list_view.dart';
 import 'package:flutter_job_tracker_app/view/core/proflie_view.dart';
 import 'package:flutter_job_tracker_app/view/core/report_view.dart';
@@ -103,6 +104,12 @@ final GoRouter _router = GoRouter(
       path: '/applications',
       pageBuilder: (BuildContext context, GoRouterState state) {
         return _customFadeTransition(const ApplicationsPage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/otp',
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return _customFadeTransition(const OTPScreen(), state);
       },
     ),
   ],

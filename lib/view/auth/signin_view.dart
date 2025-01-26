@@ -174,34 +174,40 @@ class SignInPage extends StatelessWidget {
                               ),
                       ),
                     ),
-                    const SizedBox(height: 20),  // This adds a space of 40 height
+                    const SizedBox(
+                        height: 20), // This adds a space of 40 height
 
                     SizedBox(
-                      width: double.infinity,  // Makes the button take the full width
+                      width: double
+                          .infinity, // Makes the button take the full width
                       child: ElevatedButton(
-                        onPressed: () => context.go('/'),  // Action when the button is pressed
+                        onPressed: () => context
+                            .go('/'), // Action when the button is pressed
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40),  // Rounded corners
-                            side: const BorderSide(  // Apply white border
-                              color: Colors.white,  // White border color
-                              width: 2.0,  // Border width
+                            borderRadius:
+                                BorderRadius.circular(40), // Rounded corners
+                            side: const BorderSide(
+                              // Apply white border
+                              color: Colors.white, // White border color
+                              width: 2.0, // Border width
                             ),
                           ),
-                          backgroundColor: Colors.transparent,  // Remove the background color
+                          backgroundColor:
+                              Colors.transparent, // Remove the background color
                         ),
                         child: const Text(
-                          'Go back',  // The text displayed on the button
+                          'Go back', // The text displayed on the button
                           style: TextStyle(
-                            fontSize: 16,  // Text size
-                            fontWeight: FontWeight.bold,  // Text weight (optional)
-                            color: Colors.white,  // Text color (should be white to stand out against transparent background)
+                            fontSize: 16, // Text size
+                            fontWeight:
+                                FontWeight.bold, // Text weight (optional)
+                            color: Colors
+                                .white, // Text color (should be white to stand out against transparent background)
                           ),
                         ),
                       ),
                     )
-
-
                   ],
                 ),
               ),

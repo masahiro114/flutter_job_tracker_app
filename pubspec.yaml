@@ -39,6 +39,8 @@ dependencies:
   firebase_auth: ^5.3.4
   firebase_core: ^3.8.1
   provider:
+  otp_text_field:
+  flutter_otp_text_field:
   google_sign_in: ^6.2.2
   flutter_signin_button: ^2.0.0
   get: ^4.6.6
