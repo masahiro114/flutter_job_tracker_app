@@ -1,80 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_job_tracker_app/view/common/background_widget.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
+import 'package:provider/provider.dart';
 
-class OTPScreen extends StatelessWidget {
+class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
 
-  // Extracted reusable text style for consistency
+  @override
+  _OTPScreenState createState() => _OTPScreenState();
+}
+
+class _OTPScreenState extends State<OTPScreen> {
+  String _otpCode = '';
+
+  // Reusable text style
   TextStyle _textStyle({
     Color color = Colors.white,
     double fontSize = 17,
     FontWeight fontWeight = FontWeight.w400,
-    double height = 0.08,
-    double letterSpacing = -0.43,
   }) {
     return TextStyle(
       color: color,
       fontSize: fontSize,
       fontWeight: fontWeight,
-      height: height,
-      letterSpacing: letterSpacing,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final signInViewModel = context.watch<SignInViewModel>();
+
     return Scaffold(
-        body: GlobalBackground(
-            child: Center(
-      child: Container(
-        padding: const EdgeInsets.only(
-          top: 16.0,
-          left: 24.0,
-          right: 24.0,
-          bottom: 24.0,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "OTP Title",
-              style: _textStyle(
-                color: Colors.white,
-                fontSize: 32,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            const SizedBox(height: 40.0),
-            Text(
-              "OTP Subtitle".toUpperCase(),
-              style: _textStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 40.0),
-            Text("OTP Message",
-                textAlign: TextAlign.center,
-                style: _textStyle(
-                    color: Colors.white,
+      body: GlobalBackground(
+        child: Center(
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Verify OTP",
+                  style: _textStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                Text(
+                  "Enter the 6-digit OTP sent to your phone.",
+                  textAlign: TextAlign.center,
+                  style: _textStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w600)),
-            const SizedBox(height: 20.0),
-            OtpTextField(
-                mainAxisAlignment: MainAxisAlignment.center,
-                numberOfFields: 6,
-                onSubmit: (code) => print("OTP is => $code")),
-            const SizedBox(height: 20.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  onPressed: () {}, child: const Text("Verify OTP")),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 30.0),
+                OtpTextField(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  numberOfFields: 6,
+                  borderColor: Colors.grey,
+                  onSubmit: (code) {
+                    setState(() {
+                      _otpCode = code;
+                    });
+                  },
+                ),
+                const SizedBox(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_otpCode.isEmpty || _otpCode.length < 6) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Please enter a valid OTP")),
+                        );
+                        return;
+                      }
+                      signInViewModel.verifyOTP(context, _otpCode);
+                    },
+                    child: signInViewModel.isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text("Verify OTP"),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-    )));
+    );
   }
 }

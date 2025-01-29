@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_job_tracker_app/view/auth/otp_screen.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -116,6 +119,33 @@ class SignInPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    // Phone number skeleton: +XX XXXXXXXXX
+                    TextField(
+                      controller: signInViewModel.phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your phone number (+XX XXXXXXXXX)',
+                        hintStyle: TextStyle(color: Colors.white70),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white38, width: 2.0),
+                        ),
+                      ),
+                      style: _textStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: signInViewModel.passwordController,
                       obscureText: true,
@@ -152,8 +182,17 @@ class SignInPage extends StatelessWidget {
                                     await signInViewModel.signIn(context);
                                 if (error != null) {
                                   _showError(context, error);
-                                } else {
-                                  context.go('/home');
+                                }
+                                final phoneNumber = signInViewModel
+                                    .phoneNumberController.text
+                                    .trim();
+                                // Send OTP after successful sign-in
+                                try {
+                                  await signInViewModel.sendOTP(
+                                      context, phoneNumber);
+                                  context.go('/otp');
+                                } catch (e) {
+                                  _showError(context, e.toString());
                                 }
                               },
                         style: ElevatedButton.styleFrom(
