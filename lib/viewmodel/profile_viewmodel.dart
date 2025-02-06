@@ -4,7 +4,7 @@ import 'package:flutter_job_tracker_app/model/signout_model.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   // Create an instance of SignOutModel
-  final SignOutModel _signOutModel = SignOutModel();  // Instantiate SignOutModel
+  final SignOutModel _signOutModel = SignOutModel(); // Instantiate SignOutModel
 
   // Bottom navigation selected index
   int _currentState = 3;
@@ -24,8 +24,8 @@ class ProfileViewModel extends ChangeNotifier {
       context.go('/applications');
     } else if (_currentState == 2) {
       context.go('/report');
-    } else if (_currentState == 3) {
-      context.go('/profile');
+    } else if (_currentState == 0) {
+      context.go('/home');
     }
   }
 
@@ -36,7 +36,7 @@ class ProfileViewModel extends ChangeNotifier {
       await _signOutModel.signOut();
 
       // Navigate to the sign-in page after sign-out
-      context.go('/');  // Adjust based on your app's route name
+      context.go('/'); // Adjust based on your app's route name
     } catch (e) {
       // Show an error message if sign-out fails
       ScaffoldMessenger.of(context).showSnackBar(

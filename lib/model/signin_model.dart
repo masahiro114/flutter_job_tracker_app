@@ -14,6 +14,7 @@ class SignInModel {
         email: email,
         password: password,
       );
+      print("User: ${userCredential.user?.uid}");
       return userCredential;
     } catch (e) {
       throw Exception(e.toString());

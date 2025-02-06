@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "94467057088-1e03jm108f9ve66rg4u898ukfmo3f2rm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.masahiro.jobtracker",
+            "certificate_hash": "5a95a56acaa4c6b4183506247d0a4f27cb933d2a"
+          }
+        },
+        {
+          "client_id": "94467057088-7jfqbpm8t7dfifkosvu5b5ol2godrq9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.masahiro.jobtracker",
+            "certificate_hash": "9e21e6586872e8a5c3709c2fb93c7df0ae8411f3"
+          }
+        },
+        {
           "client_id": "94467057088-ijqot3tbvh8hphghbit9p45jcn1huktm.apps.googleusercontent.com",
           "client_type": 3
         }

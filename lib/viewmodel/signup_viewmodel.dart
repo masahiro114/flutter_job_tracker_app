@@ -1,10 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final phoneRegex = RegExp(r'^\+61\d{9}$');
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -12,160 +15,142 @@ class SignUpViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  // Sign up using email and password
-  Future<void> signUp(String name, String email, String password) async {
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+  String? _verificationId;
+
+  // Sign up using email, password, and phone number
+  Future<void> signUp(BuildContext context, String name, String email,
+      String password, String phoneNumber) async {
+    if (name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        phoneNumber.isEmpty) {
       _setError('Please enter all fields');
-      print('SignUp Error: One or more fields are empty.');
+      return;
+    }
+
+    if (!phoneRegex.hasMatch(phoneNumber)) {
+      Get.snackbar(
+        'Invalid Phone Number',
+        'Please enter a valid phone number in the format +61XXXXXXXXX.',
+      );
       return;
     }
 
     _setLoading(true);
-    print('SignUp: Started sign-up process.');
 
     try {
-      await _auth.createUserWithEmailAndPassword(
+      // Create user with email & password
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      print('SignUp: User created successfully.');
 
-      final viewModel = SignUpViewModel();
-      viewModel.testReload();
+      User? user = userCredential.user;
+      if (user != null) {
+        // Update user's display name
+        await user.updateDisplayName(name);
+
+        // Link phone number with Firebase authentication
+        await _verifyAndLinkPhoneNumber(context, user, phoneNumber);
+        print("Starting to link User with Phone Number.");
+      }
 
       _setError(null); // Clear error on success
-      print('SignUp: Sending verification link...');
-      await _sendVerifyLink(); // Send verification link after sign-up
-
-      // Wait for email verification
-      print('SignUp: Waiting for email verification...');
-      print(
-          'SignUp: Waiting a few seconds for email verification propagation...');
-      await Future.delayed(Duration(seconds: 10));
-      print('SignUp: Starting email verification check...');
-
-      final isVerified = await verifyEmail();
-      if (!isVerified) {
-        _setError('Email verification timed out.');
-        print('SignUp: Email verification timed out.');
-        return;
-      }
-
-      // Email verified - continue with other operations if needed
-      print('SignUp: Email verified successfully.');
-      Get.snackbar('Success', 'Account created successfully!',
-          snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      _setError('Sign-up failed: ${e.toString()}');
-      print('SignUp Error: ${e.toString()}');
+      _setError(e.toString());
     } finally {
       _setLoading(false);
-      print('SignUp: Process completed.');
     }
   }
 
-  // Wait for email verification
-  Future<bool> verifyEmail() async {
-    print('VerifyEmail: Starting email verification process.');
+  // Function to verify and link phone number to user
+  Future<void> _verifyAndLinkPhoneNumber(
+      BuildContext context, User user, String phoneNumber) async {
     try {
-      print('SignUp: Proceeding to waitForEmailVerification...');
-      final isVerified = await waitForEmailVerification(
-        checkInterval: Duration(seconds: 5),
-        timeout: Duration(minutes: 5),
-      );
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await user.linkWithCredential(credential);
+          print("Phone number linked successfully.");
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          _setLoading(false);
+          print("Phone verification failed: ${e.message}");
+          Get.snackbar("Error", e.message ?? "Phone verification failed.");
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          _verificationId = verificationId; // Store verification ID
+          print("OTP Sent! _verificationId = $_verificationId");
+          _setLoading(false);
 
-      if (isVerified) {
-        Get.snackbar('Success', 'Your email has been verified!',
-            snackPosition: SnackPosition.BOTTOM);
-        print('VerifyEmail: Email verified.');
-      } else {
-        print('VerifyEmail: Email verification timed out.');
-        Get.snackbar('Timeout', 'Email verification timed out.',
-            snackPosition: SnackPosition.BOTTOM);
-      }
-      return isVerified;
+          // Navigate to OTP screen
+          context.go('/otp');
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          _verificationId =
+              verificationId; // Store verification ID even on timeout
+          Get.snackbar(
+              'OTP Timeout', 'Auto-retrieval failed. Enter OTP manually.');
+          print("Auto-retrieval timeout. _verificationId = $_verificationId");
+        },
+      );
     } catch (e) {
-      _setError('Error during email verification: ${e.toString()}');
-      print('VerifyEmail Error: ${e.toString()}');
-      return false;
+      _setLoading(false);
+      print("Error linking phone number: $e");
+      Get.snackbar("Error", "Failed to link phone number.");
     }
   }
 
-  Future<void> _sendVerifyLink() async {
-    final user = _auth.currentUser;
-    if (user == null) {
-      _setError('No user is currently signed in.');
-      print('_sendVerifyLink Error: No user signed in.');
+  Future<void> verifyOTP(BuildContext context, String otp) async {
+    print("Debug: _verificationId before verifying OTP: $_verificationId");
+
+    if (_verificationId == null) {
+      print("_verificationId is NULL. Cannot verify OTP.");
+      Get.snackbar('Error', 'Verification ID is null. Please resend OTP.');
       return;
     }
 
+    _setLoading(true);
+    print("Started verifyOTP with code: $otp");
+
     try {
-      await user.sendEmailVerification();
-      print('_sendVerifyLink: Verification link sent successfully.');
-      Get.snackbar(
-        'Link sent',
-        'A verification link has been sent to your email.',
-        margin: EdgeInsets.all(30),
-        snackPosition: SnackPosition.BOTTOM,
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId!,
+        smsCode: otp,
       );
-    } catch (e) {
-      print('_sendVerifyLink Error: ${e.toString()}');
-      _setError('Failed to send verification link: ${e.toString()}');
-    }
-  }
 
-  Future<bool> waitForEmailVerification({
-    Duration checkInterval = const Duration(seconds: 5),
-    Duration timeout = const Duration(minutes: 20),
-  }) async {
-    final user = FirebaseAuth.instance.currentUser;
+      print("Signing in with OTP...");
+      UserCredential userCredential = await FirebaseAuth.instance.currentUser!
+          .linkWithCredential(credential);
 
-    if (user == null) {
-      print('waitForEmailVerification: No user is signed in.');
-      throw Exception('No user is currently signed in.');
-    }
+      print("Firebase sign-in completed!");
 
-    final completer = Completer<bool>();
-    final startTime = DateTime.now();
-
-    Timer.periodic(checkInterval, (timer) async {
-      print('waitForEmailVerification: Checking email verification status...');
-      try {
-        await user.reload(); // Fetch latest user data
-        print('waitForEmailVerification: Reloaded user data.');
-
-        if (user.emailVerified) {
-          print('waitForEmailVerification: Email is verified!');
-          timer.cancel();
-          completer.complete(true);
-        } else if (DateTime.now().difference(startTime) >= timeout) {
-          print(
-              'waitForEmailVerification: Timeout reached. Email not verified.');
-          timer.cancel();
-          completer.complete(false);
-        } else {
-          print('waitForEmailVerification: Email not verified yet.');
-        }
-      } catch (e) {
-        print('waitForEmailVerification Error: ${e.toString()}');
-        timer.cancel();
-        completer.complete(false);
+      print("Checking if userCredential.user is not null...");
+      if (userCredential.user != null) {
+        print("User exists. Proceeding with navigation...");
+        Future.delayed(Duration(milliseconds: 200), () {
+          if (context.mounted) {
+            print("Context is still mounted. Navigating now...");
+            GoRouter.of(context).go('/home');
+            print("Navigation function executed!");
+            _setLoading(false);
+          } else {
+            print("Navigation failed: Context is unmounted.");
+          }
+        });
+      } else {
+        print("userCredential.user is NULL. Navigation skipped.");
       }
-    });
-
-    return completer.future;
-  }
-
-  void testReload() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      print('Before reload: emailVerified = ${user.emailVerified}');
-      print('User email: ${user.email}');
-      print('User UID: ${user.uid}');
-      await user.reload();
-      print('After reload: emailVerified = ${user.emailVerified}');
-    } else {
-      print('No user is signed in.');
+    } on FirebaseAuthException catch (e) {
+      print("FirebaseAuthException: ${e.message}");
+      Get.snackbar('Error Occurred', e.message ?? 'Invalid OTP');
+    } catch (e) {
+      print("General Exception: $e");
+      Get.snackbar('Error Occurred', e.toString());
+    } finally {
+      print("Resetting loading state...");
+      _setLoading(false);
     }
   }
 

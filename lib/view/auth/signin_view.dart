@@ -119,33 +119,6 @@ class SignInPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // Phone number skeleton: +XX XXXXXXXXX
-                    TextField(
-                      controller: signInViewModel.phoneNumberController,
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your phone number (+XX XXXXXXXXX)',
-                        hintStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white38, width: 2.0),
-                        ),
-                      ),
-                      style: _textStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
                     TextField(
                       controller: signInViewModel.passwordController,
                       obscureText: true,
@@ -183,17 +156,6 @@ class SignInPage extends StatelessWidget {
                                 if (error != null) {
                                   _showError(context, error);
                                 }
-                                final phoneNumber = signInViewModel
-                                    .phoneNumberController.text
-                                    .trim();
-                                // Send OTP after successful sign-in
-                                try {
-                                  await signInViewModel.sendOTP(
-                                      context, phoneNumber);
-                                  context.go('/otp');
-                                } catch (e) {
-                                  _showError(context, e.toString());
-                                }
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -213,36 +175,28 @@ class SignInPage extends StatelessWidget {
                               ),
                       ),
                     ),
-                    const SizedBox(
-                        height: 20), // This adds a space of 40 height
-
+                    const SizedBox(height: 20),
                     SizedBox(
                       width: double
                           .infinity, // Makes the button take the full width
                       child: ElevatedButton(
-                        onPressed: () => context
-                            .go('/'), // Action when the button is pressed
+                        onPressed: () => context.go('/'),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(40), // Rounded corners
+                            borderRadius: BorderRadius.circular(40),
                             side: const BorderSide(
-                              // Apply white border
-                              color: Colors.white, // White border color
-                              width: 2.0, // Border width
+                              color: Colors.white,
+                              width: 2.0,
                             ),
                           ),
-                          backgroundColor:
-                              Colors.transparent, // Remove the background color
+                          backgroundColor: Colors.transparent,
                         ),
                         child: const Text(
-                          'Go back', // The text displayed on the button
+                          'Go back',
                           style: TextStyle(
-                            fontSize: 16, // Text size
-                            fontWeight:
-                                FontWeight.bold, // Text weight (optional)
-                            color: Colors
-                                .white, // Text color (should be white to stand out against transparent background)
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),

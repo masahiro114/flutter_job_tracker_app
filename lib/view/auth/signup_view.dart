@@ -12,6 +12,7 @@ class SignUpPage extends StatelessWidget {
     final TextEditingController nameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
 
     return Scaffold(
       body: Container(
@@ -62,6 +63,33 @@ class SignUpPage extends StatelessWidget {
                       style: _textStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
+                    // Phone number skeleton: +61XXXXXXXXX
+                    TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your phone number (+61XXXXXXXXX)',
+                        hintStyle: TextStyle(color: Colors.white70),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white38, width: 2.0),
+                        ),
+                      ),
+                      style: _textStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: passwordController,
                       obscureText: true,
@@ -81,16 +109,13 @@ class SignUpPage extends StatelessWidget {
                         onPressed: viewModel.isLoading
                             ? null
                             : () async {
-                          await viewModel.signUp(
-                            nameController.text.trim(),
-                            emailController.text.trim(),
-                            passwordController.text.trim(),
-                          );
-
-                          if (viewModel.errorMessage == null) {
-                            context.go('/home');
-                          }
-                        },
+                                await viewModel.signUp(
+                                    context,
+                                    nameController.text.trim(),
+                                    emailController.text.trim(),
+                                    passwordController.text.trim(),
+                                    phoneController.text.trim());
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -100,36 +125,37 @@ class SignUpPage extends StatelessWidget {
                         child: viewModel.isLoading
                             ? const CircularProgressIndicator()
                             : Text(
-                          'Sign up',
-                          style: _textStyle(
-                            color: const Color(0xFF0309C8),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                                'Sign up',
+                                style: _textStyle(
+                                  color: const Color(0xFF0309C8),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
 
                     const SizedBox(height: 20),
                     SizedBox(
-                      width: double.infinity,  // Makes the button take the full width
+                      width: double
+                          .infinity, // Makes the button take the full width
                       child: ElevatedButton(
-                        onPressed: () => context.go('/'),  // Action when the button is pressed
+                        onPressed: () => context.go('/'),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40),  // Rounded corners
-                            side: const BorderSide(  // Apply white border
-                              color: Colors.white,  // White border color
-                              width: 2.0,  // Border width
+                            borderRadius: BorderRadius.circular(40),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
                             ),
                           ),
-                          backgroundColor: Colors.transparent,  // Remove the background color
+                          backgroundColor: Colors.transparent,
                         ),
                         child: const Text(
-                          'Go back',  // The text displayed on the button
+                          'Go back',
                           style: TextStyle(
-                            fontSize: 16,  // Text size
-                            fontWeight: FontWeight.bold,  // Text weight (optional)
-                            color: Colors.white,  // Text color (should be white to stand out against transparent background)
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),

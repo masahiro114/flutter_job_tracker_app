@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_job_tracker_app/model/start_model.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Import Google Sign-In package
-import 'package:firebase_auth/firebase_auth.dart';  // Import Firebase Auth
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 
 class StartPageViewModel extends ChangeNotifier {
   final StartPageModel model;
@@ -45,7 +45,8 @@ class StartPageViewModel extends ChangeNotifier {
       }
 
       // Get the authentication details from Google
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Create a new Firebase credential from Google sign-in
       final credential = GoogleAuthProvider.credential(
@@ -55,7 +56,7 @@ class StartPageViewModel extends ChangeNotifier {
 
       // Sign in to Firebase with the Google credential
       final UserCredential userCredential =
-      await _auth.signInWithCredential(credential);
+          await _auth.signInWithCredential(credential);
 
       // Check if user is newly signed up or existing
       if (userCredential.additionalUserInfo?.isNewUser ?? false) {
@@ -75,7 +76,6 @@ class StartPageViewModel extends ChangeNotifier {
       _setLoading(false);
     }
   }
-
 
   // Helper method to set loading state
   void _setLoading(bool loading) {

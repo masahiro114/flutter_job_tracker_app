@@ -16,8 +16,8 @@ class ApplicationViewModel extends ChangeNotifier {
 
   // Method to handle navigation when an item is tapped
   void onNavBarPressed(BuildContext context) {
-    if (_currentState == 1) {
-      context.go('/applications');
+    if (_currentState == 0) {
+      context.go('/home');
     } else if (_currentState == 2) {
       context.go('/report');
     } else if (_currentState == 3) {

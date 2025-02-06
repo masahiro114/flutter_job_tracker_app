@@ -28,7 +28,8 @@ class HomePage extends StatelessWidget {
         body: GlobalBackground(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Handle button press logic (e.g., navigation to specific app)
+          // Handle button press logic
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
