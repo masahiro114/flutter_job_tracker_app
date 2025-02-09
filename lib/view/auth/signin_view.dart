@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_job_tracker_app/view/auth/otp_screen.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
+import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,7 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signInViewModel = context.watch<SignInViewModel>();
+    final signUpViewModel = context.watch<SignUpViewModel>();
 
     return Scaffold(
       body: Container(

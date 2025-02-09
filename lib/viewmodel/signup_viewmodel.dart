@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_job_tracker_app/viewmodel/verification_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,8 +16,6 @@ class SignUpViewModel extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-
-  String? _verificationId;
 
   // Sign up using email, password, and phone number
   Future<void> signUp(BuildContext context, String name, String email,
@@ -80,19 +80,21 @@ class SignUpViewModel extends ChangeNotifier {
           Get.snackbar("Error", e.message ?? "Phone verification failed.");
         },
         codeSent: (String verificationId, int? resendToken) async {
-          _verificationId = verificationId; // Store verification ID
-          print("OTP Sent! _verificationId = $_verificationId");
+          Provider.of<VerificationViewModel>(context, listen: false)
+              .setVerificationId(verificationId); // Store verification ID
+          print("OTP Sent! _verificationId = $verificationId");
           _setLoading(false);
 
           // Navigate to OTP screen
           context.go('/otp');
         },
         codeAutoRetrievalTimeout: (String verificationId) {
-          _verificationId =
-              verificationId; // Store verification ID even on timeout
+          Provider.of<VerificationViewModel>(context, listen: false)
+              .setVerificationId(
+                  verificationId); // Store verification ID even on timeout
           Get.snackbar(
               'OTP Timeout', 'Auto-retrieval failed. Enter OTP manually.');
-          print("Auto-retrieval timeout. _verificationId = $_verificationId");
+          print("Auto-retrieval timeout. _verificationId = $verificationId");
         },
       );
     } catch (e) {
@@ -103,9 +105,12 @@ class SignUpViewModel extends ChangeNotifier {
   }
 
   Future<void> verifyOTP(BuildContext context, String otp) async {
-    print("Debug: _verificationId before verifying OTP: $_verificationId");
+    final verificationId =
+        Provider.of<VerificationViewModel>(context, listen: false)
+            .verificationId;
+    print("Debug: _verificationId before verifying OTP: $verificationId");
 
-    if (_verificationId == null) {
+    if (verificationId == null) {
       print("_verificationId is NULL. Cannot verify OTP.");
       Get.snackbar('Error', 'Verification ID is null. Please resend OTP.');
       return;
@@ -116,7 +121,7 @@ class SignUpViewModel extends ChangeNotifier {
 
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId!,
+        verificationId: verificationId,
         smsCode: otp,
       );
 

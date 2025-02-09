@@ -7,6 +7,7 @@ import 'package:flutter_job_tracker_app/view/core/report_view.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signin_viewmodel.dart';
 import 'package:flutter_job_tracker_app/viewmodel/signup_viewmodel.dart';
 import 'package:flutter_job_tracker_app/viewmodel/profile_viewmodel.dart';
+import 'package:flutter_job_tracker_app/viewmodel/verification_viewmodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SignInViewModel()),
         ChangeNotifierProvider(create: (_) => SignUpViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
+        ChangeNotifierProvider(create: (_) => VerificationViewModel()),
         // Add other providers here as needed
       ],
       child: const MyApp(),
