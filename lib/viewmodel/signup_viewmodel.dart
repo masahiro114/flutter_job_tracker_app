@@ -105,6 +105,7 @@ class SignUpViewModel extends ChangeNotifier {
   }
 
   Future<void> verifyOTP(BuildContext context, String otp) async {
+    final user = FirebaseAuth.instance.currentUser;
     final verificationId =
         Provider.of<VerificationViewModel>(context, listen: false)
             .verificationId;
@@ -113,6 +114,13 @@ class SignUpViewModel extends ChangeNotifier {
     if (verificationId == null) {
       print("_verificationId is NULL. Cannot verify OTP.");
       Get.snackbar('Error', 'Verification ID is null. Please resend OTP.');
+      return;
+    }
+
+    // Check if the phone number is already linked
+    if (user?.phoneNumber != null) {
+      print("⚠️ Phone number is already linked: ${user?.phoneNumber}");
+      context.go('/home'); // Skip linking and go to home
       return;
     }
 
@@ -148,6 +156,10 @@ class SignUpViewModel extends ChangeNotifier {
         print("userCredential.user is NULL. Navigation skipped.");
       }
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'provider-already-linked') {
+        print("Phone number is already linked. Redirecting...");
+        GoRouter.of(context).go('/home'); // If already linked, navigate home
+      }
       print("FirebaseAuthException: ${e.message}");
       Get.snackbar('Error Occurred', e.message ?? 'Invalid OTP');
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_job_tracker_app/viewmodel/home_viewmodel.dart'; // Import ViewModel
@@ -5,7 +6,8 @@ import 'package:flutter_job_tracker_app/view/common/navigation_widget.dart'; // 
 import 'package:flutter_job_tracker_app/view/common/background_widget.dart'; // Global Background
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +36,14 @@ class HomePage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Recent Applications',
+                    'Recent Applications for ${user?.displayName}',
                     style: _textStyle(
                       color: Colors.white,
-                      fontSize: 32,
+                      fontSize: 28,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 80),
                   _applicationButton('Application 1'),
                   const SizedBox(height: 20),
                   _applicationButton('Application 2'),

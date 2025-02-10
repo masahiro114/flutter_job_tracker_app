@@ -5,9 +5,9 @@ class SignOutModel {
 
   Future<void> signOut() async {
     try {
-      //print('Attempting to sign out...');
+      print('Attempting to sign out...');
       await _auth.signOut();
-      //print('Sign-out successful');
+      print('Sign-out successful');
     } catch (e) {
       //print('Sign-out failed: $e');
       throw Exception('Sign out failed: ${e.toString()}');

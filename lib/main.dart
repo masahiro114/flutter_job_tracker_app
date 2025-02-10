@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_job_tracker_app/view/auth/otp_screen.dart';
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
 }
 
 final GoRouter _router = GoRouter(
+  initialLocation:
+      FirebaseAuth.instance.currentUser == null ? "/signin" : "/home",
   routes: [
     GoRoute(
       path: '/',
@@ -87,7 +90,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/home',
       pageBuilder: (BuildContext context, GoRouterState state) {
-        return _customFadeTransition(const HomePage(), state);
+        return _customFadeTransition(HomePage(), state);
       },
     ),
     GoRoute(
